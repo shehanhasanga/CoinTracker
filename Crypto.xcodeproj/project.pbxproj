@@ -25,6 +25,7 @@
 		BED1DCC727AEABBA006BCE84 /* CoinImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED1DCC627AEABBA006BCE84 /* CoinImageView.swift */; };
 		BED1DCC927AEAD97006BCE84 /* CoinImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED1DCC827AEAD97006BCE84 /* CoinImageService.swift */; };
 		BED1DCCB27AEAF6E006BCE84 /* CoinImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED1DCCA27AEAF6E006BCE84 /* CoinImageViewModel.swift */; };
+		BED1DCCD27AEB705006BCE84 /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED1DCCC27AEB705006BCE84 /* LocalFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		BED1DCC627AEABBA006BCE84 /* CoinImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageView.swift; sourceTree = "<group>"; };
 		BED1DCC827AEAD97006BCE84 /* CoinImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageService.swift; sourceTree = "<group>"; };
 		BED1DCCA27AEAF6E006BCE84 /* CoinImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageViewModel.swift; sourceTree = "<group>"; };
+		BED1DCCC27AEB705006BCE84 /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				BED1DCC327AE7A21006BCE84 /* NetworkingManager.swift */,
+				BED1DCCC27AEB705006BCE84 /* LocalFileManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				BED1DCB827AE5074006BCE84 /* CoinRowView.swift in Sources */,
 				BED1DCBE27AE6199006BCE84 /* HomeViewModel.swift in Sources */,
 				BED1DCB127AE26C6006BCE84 /* CircleButton.swift in Sources */,
+				BED1DCCD27AEB705006BCE84 /* LocalFileManager.swift in Sources */,
 				BED1DC9827AE208E006BCE84 /* ContentView.swift in Sources */,
 				BED1DCC727AEABBA006BCE84 /* CoinImageView.swift in Sources */,
 				BED1DCAD27AE25C3006BCE84 /* HomeView.swift in Sources */,
