@@ -20,6 +20,9 @@ class DeveloperPreview{
     
     static let homeViewModel = HomeViewModel()
     
+    static let stat1 = StatisticModel(title: "Market Gap", value: "$12.5Bn", percentageChange: 25.34)
+    static let stat3 = StatisticModel(title: "Portfolio Value", value: "$60.4k", percentageChange: -12.40)
+    static let stat2 = StatisticModel(title: "Total volume", value: "$1.23Tr")
     private init(){
         
     }
