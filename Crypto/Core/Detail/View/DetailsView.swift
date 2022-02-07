@@ -26,7 +26,14 @@ struct DetailsLoadingView: View {
 
 
 struct DetailsView: View {
+    
     @StateObject var detailsViewModel:DetailViewModel
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    
+    ]
+    private var grigSpacing = 30.0
     var coin:CoinModel
     init(coin: CoinModel){
         self.coin = coin
@@ -34,12 +41,82 @@ struct DetailsView: View {
     }
     
     var body: some View {
-        Text(coin.name ?? "")
+        ScrollView{
+            VStack{
+                ChartView(coin: coin)
+                    .padding(.vertical)
+                VStack(alignment:.leading, spacing:20){
+                    overviewTitle
+                    Divider()
+                    overviewGrid
+                    
+                    additionalTitle
+                    Divider()
+                    additionalGrid
+                    
+                    
+                }
+                .padding()
+            }
+            
+        }
+        .navigationBarHidden(false)
+        .navigationTitle(coin.name ?? "")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                navbarTrailing
+            }
+        }
+      
     }
 }
 
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailsView(coin: dev.coin )
+        NavigationView{
+            DetailsView(coin: dev.coin )
+        }
+        
+    }
+}
+
+extension DetailsView {
+    var navbarTrailing : some View {
+        HStack{
+            Text(coin.symbol?.uppercased() ?? "")
+                .font(.title)
+                .foregroundColor(Color.theme.secondTextColor)
+            CoinImageView(coin: coin)
+                .frame(width: 25, height: 25)
+        }
+    }
+    var overviewTitle : some View {
+        Text("Overview")
+            .font(.title)
+            .bold()
+            .frame( alignment: .leading)
+    }
+    
+    var additionalTitle : some View {
+        Text("Additional Details")
+            .font(.title)
+            .bold()
+            .frame( alignment: .leading)
+    }
+    
+    var overviewGrid : some View {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: grigSpacing, pinnedViews: []) {
+            ForEach(detailsViewModel.overviewStats) {stat in
+                StatisticView(stat: stat)
+            }
+        }
+    }
+    
+    var additionalGrid : some View {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: grigSpacing, pinnedViews: []) {
+            ForEach(detailsViewModel.detailsStats) {stat in
+                StatisticView(stat: stat)
+            }
+        }
     }
 }
