@@ -11,6 +11,9 @@ struct HomeView: View {
     @EnvironmentObject var viewModel: HomeViewModel
     @State private var showPorfolio = false
     @State private var showPorfolioView = false
+    
+    @State var selectedCoin:CoinModel? = nil
+    @State var showDetailView:Bool = false
     var body: some View {
         
         ZStack(alignment:.leading){
@@ -46,6 +49,15 @@ struct HomeView: View {
                 Spacer()
             }
         }
+        .background(
+        NavigationLink(
+            destination: DetailsLoadingView(coin: $selectedCoin),
+            isActive: $showDetailView,
+            label: {
+               EmptyView()
+            }
+        )
+        )
     }
 }
 
@@ -63,17 +75,54 @@ struct HomeView_Previews: PreviewProvider {
 extension HomeView {
     private var columnTitles : some View {
         HStack{
-            Text("Coin")
-                .bold()
-            Spacer()
-            if showPorfolio {
-                Text("Holdings")
+            HStack(spacing:4){
+                Text("Coin")
                     .bold()
+                Image(systemName: "chevron.down")
+                    .opacity((viewModel.sortOption == .rank || viewModel.sortOption == .rankReversed) ? 1 : 0)
+                    .rotationEffect(Angle(degrees: (viewModel.sortOption == .rank) ? 0 : 180))
+            }
+            .onTapGesture {
+                withAnimation(.default) {
+                    viewModel.sortOption = viewModel.sortOption == .rank ? .rankReversed : .rank
+                }
+               
             }
            
             Spacer()
-            Text("Price")
-                .bold()
+            if showPorfolio {
+                HStack(spacing:4){
+                    Text("Holdings")
+                        .bold()
+                    Image(systemName: "chevron.down")
+                        .opacity( (viewModel.sortOption == .holdings || viewModel.sortOption == .holdingsReversed) ? 1 : 0)
+                        .rotationEffect(Angle(degrees: (viewModel.sortOption == .holdings) ? 0 : 180))
+                }
+                .onTapGesture {
+                    withAnimation(.default) {
+                        viewModel.sortOption = viewModel.sortOption == .holdings ? .holdingsReversed : .holdings
+                    }
+                   
+                }
+               
+            }
+           
+            Spacer()
+            HStack(spacing:4){
+                Text("Price")
+                    .bold()
+                Image(systemName: "chevron.down")
+                    .opacity((viewModel.sortOption == .price || viewModel.sortOption == .priceReversed) ? 1 : 0)
+                    .rotationEffect(Angle(degrees: (viewModel.sortOption == .price) ? 0 : 180))
+            }
+            .onTapGesture {
+                withAnimation(.default) {
+                    viewModel.sortOption = viewModel.sortOption == .price ? .priceReversed : .price
+                }
+               
+            }
+            
+          
             Button {
                 withAnimation(.linear) {
                     viewModel.reloadData()
@@ -90,7 +139,16 @@ extension HomeView {
     private var allCoinList : some View {
         List {
             ForEach(viewModel.allCoins) { coin in
+//                NavigationLink {
+//                    DetailsView(coin: coin)
+//                } label: {
+//                    CoinRowView(coin:coin, showHoldingColumn: false)
+//                }
                 CoinRowView(coin:coin, showHoldingColumn: false)
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
+               
                    
             }
             
@@ -98,10 +156,19 @@ extension HomeView {
         .listStyle(PlainListStyle())
         .frame(alignment:.leading)
     }
+    
+    private func segue(coin:CoinModel){
+        selectedCoin = coin
+        showDetailView.toggle()
+    }
+    
     private var portfolioList : some View {
         List {
             ForEach(viewModel.portfolioCoins) { coin in
                 CoinRowView(coin:coin, showHoldingColumn: true)
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
                    
             }
             

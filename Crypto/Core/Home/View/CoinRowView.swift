@@ -20,6 +20,7 @@ struct CoinRowView: View {
             }
             rightColumn
         }
+        .background(Color.white.opacity(0.1))
     }
 }
 
@@ -45,6 +46,7 @@ extension CoinRowView {
                 .padding(.leading,6)
                 .foregroundColor(.black)
         }
+       
     }
     
     private var centerColumn: some View{
