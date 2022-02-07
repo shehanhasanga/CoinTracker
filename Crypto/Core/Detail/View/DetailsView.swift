@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailsLoadingView: View {
     @Binding var coin:CoinModel?
+ 
     init(coin:Binding<CoinModel?>){
         self._coin = coin
         print("created view for \(coin.wrappedValue?.name)")
@@ -26,7 +27,7 @@ struct DetailsLoadingView: View {
 
 
 struct DetailsView: View {
-    
+    @State var showDescription:Bool = false
     @StateObject var detailsViewModel:DetailViewModel
     let columns = [
         GridItem(.flexible()),
@@ -48,11 +49,19 @@ struct DetailsView: View {
                 VStack(alignment:.leading, spacing:20){
                     overviewTitle
                     Divider()
+                   
+                    descriptionSection
+                    
                     overviewGrid
                     
                     additionalTitle
                     Divider()
                     additionalGrid
+                    
+                    websiteSection
+                    
+                  
+                    
                     
                     
                 }
@@ -118,5 +127,48 @@ extension DetailsView {
                 StatisticView(stat: stat)
             }
         }
+    }
+    
+    var descriptionSection : some View{
+        ZStack{
+            if let coindescription = detailsViewModel.coinDescription, !coindescription.isEmpty{
+                VStack(alignment:.leading){
+                    Text(coindescription)
+                        .lineLimit(showDescription ? nil : 3)
+                        .font(.callout)
+                        .foregroundColor(Color.theme.secondTextColor)
+                    Button{
+                        withAnimation(.easeInOut) {
+                            showDescription.toggle()
+                        }
+                    }label: {
+                        Text(showDescription ? "Show Less" : "Read More..")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                            .padding(.horizontal,4)
+                    }
+                }
+                
+                
+                
+            }
+        }
+    }
+    
+    var websiteSection: some View{
+        VStack(spacing:10){
+            if let wesitestring = detailsViewModel.websiteUrl,
+               let websiteURL = URL(string: wesitestring) {
+                Link("Website", destination: websiteURL)
+            }
+            if let reditString = detailsViewModel.reditUrl,
+               let reditUrl = URL(string: reditString){
+                Link("Reddit", destination: reditUrl)
+            }
+        }
+        .accentColor(.blue)
+        .frame(alignment:.leading)
+        .font(.headline)
     }
 }

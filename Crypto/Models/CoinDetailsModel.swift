@@ -54,6 +54,10 @@ struct CoinDetailsModel:Codable {
         case blockTimeInMinutes = "block_time_in_minutes"
         case hashingAlgorithm = "hashing_algorithm"
     }
+    
+    var readableDescription : String {
+        return description?.en?.removingHTMLOccurances ?? ""
+    }
 }
 
 
