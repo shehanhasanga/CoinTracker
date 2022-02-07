@@ -17,7 +17,7 @@ class CoinDataService{
         getAllCoins()
     }
     
-    private func getAllCoins(){
+     func getAllCoins(){
         guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=24h") else { return  }
         
         coinCancelable =  NetworkingManager.fetchCoins(url: url)
@@ -27,6 +27,7 @@ class CoinDataService{
             }, receiveValue: { [weak self]coins in
                 self?.allCoins = coins
                 self?.coinCancelable?.cancel()
+                print("data loaded +++++++++")
             })
         
     }

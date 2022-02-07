@@ -26,23 +26,29 @@ struct PortFolioView: View {
             }
             
             .navigationTitle(Text("Edit Portfolio"))
-            .navigationBarItems(leading:
-                                    XmarkButton()
-                                        .onTapGesture {
-                                            presentationMode.wrappedValue.dismiss()
-                                        }
-            )
-//            .toolbar(content: {
-//                ToolbarItem(placement: .navigationBarLeading) {
-//                    XmarkButton()
-//                        .onTapGesture {
-//                            presentationMode.wrappedValue.dismiss()
-//                        }
-//                }
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    trailingNavBarButtons
-//                }
-//            })
+//            .navigationBarItems(leading:
+//                                    XmarkButton()
+//                                        .onTapGesture {
+//                                            presentationMode.wrappedValue.dismiss()
+//                                        }
+//            )
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button{
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    trailingNavBarButtons
+                }
+            })
+            .onChange(of: viewModel.searchText) { newValue in
+                if newValue == "" {
+                    removeSelection()
+                }
+            }
         }
        
     }
@@ -65,17 +71,29 @@ struct PortFolioView_Previews: PreviewProvider {
     }
 }
 
+
+
 extension PortFolioView {
+    private func updateSelectedCoin(coin:CoinModel){
+        selectedCoin = coin
+        if
+            let portfoilioCoin = viewModel.portfolioCoins.first(where: {$0.id == coin.id}),
+            let amount = portfoilioCoin.currentHolding{
+            quantityTxt = "\(amount)"
+        } else {
+            quantityTxt = ""
+        }
+    }
     var coinLogoList : some View {
         ScrollView(.horizontal, showsIndicators: true) {
             LazyHStack(spacing:30){
-                ForEach(viewModel.allCoins) { coin in
+                ForEach( !viewModel.searchText.isEmpty ? viewModel.allCoins : viewModel.portfolioCoins) { coin in
                     CoinLogoView(coin: coin)
                         .frame(width:75)
                         .padding(4)
                         .onTapGesture {
                             withAnimation(.easeIn) {
-                                selectedCoin = coin
+                                updateSelectedCoin(coin: coin)
                             }
                         }
                         .background(
@@ -126,7 +144,7 @@ extension PortFolioView {
             Image(systemName: "checkmark")
                 .opacity(showCheckMark ? 1 : 0)
             Button{
-                
+                saveBtnClicked()
             }label: {
                 Text("Save".uppercased())
             }
@@ -137,9 +155,14 @@ extension PortFolioView {
     }
     
     private func saveBtnClicked(){
-        guard let coin = selectedCoin else {return}
+        guard
+            let coin = selectedCoin,
+            let amount = Double(quantityTxt)
+        else {return}
+        viewModel.updatePortfolio(coin: coin, amount: amount)
         withAnimation(.easeIn) {
             showCheckMark = true
+            removeSelection()
         }
         
         UIApplication.shared.endEditing()
@@ -147,6 +170,7 @@ extension PortFolioView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             withAnimation(.easeOut) {
                 showCheckMark = false
+                
             }
         }
     }

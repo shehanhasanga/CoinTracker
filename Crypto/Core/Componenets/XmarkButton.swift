@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct XmarkButton: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         Button{
 //            print("pressed")
-//            presentationMode.wrappedValue.dismiss()
+            self.dismiss()
         } label: {
             Image(systemName: "xmark")
         }
