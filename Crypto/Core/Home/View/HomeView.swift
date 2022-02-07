@@ -74,6 +74,14 @@ extension HomeView {
             Spacer()
             Text("Price")
                 .bold()
+            Button {
+                withAnimation(.linear) {
+                    viewModel.reloadData()
+                }
+            }label: {
+                Image(systemName: "goforward")
+                    .rotationEffect(Angle(degrees: viewModel.isLoading ? 360 : 0 ), anchor: .center)
+            }
         }
         .font(.caption)
         .foregroundColor(Color.theme.secondTextColor)
@@ -93,7 +101,7 @@ extension HomeView {
     private var portfolioList : some View {
         List {
             ForEach(viewModel.portfolioCoins) { coin in
-                CoinRowView(coin:coin, showHoldingColumn: false)
+                CoinRowView(coin:coin, showHoldingColumn: true)
                    
             }
             
