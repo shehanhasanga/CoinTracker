@@ -22,6 +22,7 @@ class CoinDataService{
         
         coinCancelable =  NetworkingManager.fetchCoins(url: url)
             .decode(type: [CoinModel].self, decoder: JSONDecoder())
+            .receive(on:DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 NetworkingManager.handleCompletion(completion: completion)
             }, receiveValue: { [weak self]coins in
