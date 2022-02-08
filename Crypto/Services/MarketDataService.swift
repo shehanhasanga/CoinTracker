@@ -22,6 +22,7 @@ class MarketDataService{
         
         marketDataCancelable =  NetworkingManager.fetchCoins(url: url)
             .decode(type: GlobalData.self, decoder: JSONDecoder())
+            .receive(on:DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 NetworkingManager.handleCompletion(completion: completion)
             }, receiveValue: { [weak self]globaldata in

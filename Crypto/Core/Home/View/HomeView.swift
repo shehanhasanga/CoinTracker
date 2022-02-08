@@ -11,6 +11,8 @@ struct HomeView: View {
     @EnvironmentObject var viewModel: HomeViewModel
     @State private var showPorfolio = false
     @State private var showPorfolioView = false
+    @State var showHomeView =  false
+    @State var showSettingsView =  false
     
     @State var selectedCoin:CoinModel? = nil
     @State var showDetailView:Bool = false
@@ -41,12 +43,25 @@ struct HomeView: View {
                     allCoinList
                     .transition(.move(edge: .leading))
                 } else {
-                    portfolioList
+                    ZStack(alignment:.top){
+                        if viewModel.portfolioCoins.isEmpty && viewModel.searchText.isEmpty {
+                            Text("You have not added any coin to your pocket yet. Please add any coin from the list")
+                                .font(.callout)
+                                .fontWeight(.medium)
+                                .multilineTextAlignment(.center)
+                                .padding(50)
+                        } else {
+                            portfolioList
+                        }
+                    }
                     .transition(.move(edge: .trailing))
                 }
                 
               
                 Spacer()
+            }
+            .sheet(isPresented: $showSettingsView) {
+                SettingsView()
             }
         }
         .background(
@@ -181,6 +196,8 @@ extension HomeView {
                 .onTapGesture {
                     if showPorfolio {
                         showPorfolioView.toggle()
+                    } else{
+                        showSettingsView.toggle()
                     }
                 }
                 .animation(.none)
